@@ -1,7 +1,14 @@
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS, cross_origin
+import sqlite3
 app = Flask(__name__)
 CORS(app)
+
+# conn = sqlite3.connect('weblog.db')
+# print "Opened database successfully";
+# conn.execute('CREATE TABLE students (name TEXT, addr TEXT, city TEXT, pin TEXT)')
+# print "Table created successfully";
+# conn.close()
 
 @app.route('/')
 def display():
@@ -37,5 +44,5 @@ def data():
     user = request.args.get('user')
     print user
 
-app.run(debug=True, port=5000)
 if __name__ == '__main__':
+    app.run(debug=True, port=5000)
