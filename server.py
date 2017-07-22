@@ -31,6 +31,11 @@ def query():
     else:
         return 'nothing specified'
 
+@app.route('/data')
+def data():
+    # here we want to get the value of user (i.e. ?user=some-value)
+    user = request.args.get('user')
+    print user
+
 app.run(debug=True, port=5000)
 if __name__ == '__main__':
-    app.run()
