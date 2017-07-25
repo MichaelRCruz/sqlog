@@ -4,12 +4,6 @@ import sqlite3
 app = Flask(__name__)
 CORS(app)
 
-# conn = sqlite3.connect('database.db')
-# print "Opened database successfully";
-# conn.execute('CREATE TABLE posts (component_type TEXT, content TEXT)')
-# print "Table created successfully";
-# conn.close()
-
 def read_data():
     print 'inside read_data() function'
     conn = sqlite3.connect('database.db')
