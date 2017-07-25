@@ -1,14 +1,22 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, g
 from flask_cors import CORS, cross_origin
 import sqlite3
 app = Flask(__name__)
 CORS(app)
 
-# conn = sqlite3.connect('weblog.db')
+# conn = sqlite3.connect('database.db')
 # print "Opened database successfully";
-# conn.execute('CREATE TABLE students (name TEXT, addr TEXT, city TEXT, pin TEXT)')
+# conn.execute('CREATE TABLE posts (component_type TEXT, content TEXT)')
 # print "Table created successfully";
 # conn.close()
+
+def read_data():
+    print 'inside read_data() function'
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM posts WHERE component_type='test'")
+    selected_data = c.fetchall()
+    print selected_data
 
 @app.route('/')
 def display():
@@ -38,11 +46,19 @@ def query():
     else:
         return 'nothing specified'
 
-@app.route('/data')
+@app.route('/data', methods=['POST'])
 def data():
-    # here we want to get the value of user (i.e. ?user=some-value)
-    user = request.args.get('user')
-    print user
+    data = jsonify(request.json)
+    component_type = request.get_json()['post']['component_type']
+    content = request.get_json()['post']['content']
+    post = (component_type,) + (content,)
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO posts VALUES (?, ?)", post)
+    conn.commit()
+    conn.close()
+    read_data()
+    return jsonify({})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, use_debugger=False)
