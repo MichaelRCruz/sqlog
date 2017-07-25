@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, jsonify, g
 from flask_cors import CORS, cross_origin
+
+import flask
+import flask_cors
 import sqlite3
-app = Flask(__name__)
-CORS(app)
+app = flask.Flask(__name__)
+flask_cors.CORS(app)
 
 def read_data():
     print 'inside read_data() function'
@@ -34,17 +37,16 @@ def weblog():
 # http://localhost:5000/query?file=foo.html
 @app.route('/query')
 def query():
-    if 'file' in request.args:
-        query_filename = request.args.get('file')
-        return render_template(query_filename)
+    if 'file' in flask.request.args:
+        query_filename = flask.request.args.get('file')
+        return flask.render_template(query_filename)
     else:
         return 'nothing specified'
 
 @app.route('/data', methods=['POST'])
 def data():
-    data = jsonify(request.json)
-    component_type = request.get_json()['post']['component_type']
-    content = request.get_json()['post']['content']
+    component_type = flask.request.get_json()['post']['component_type']
+    content = flask.request.get_json()['post']['content']
     post = (component_type,) + (content,)
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
@@ -52,7 +54,7 @@ def data():
     conn.commit()
     conn.close()
     read_data()
-    return jsonify({})
+    return flask.jsonify({})
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000, use_debugger=False)
