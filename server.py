@@ -20,19 +20,31 @@ def display():
     print "WELCOME TO THE FOLD."
     return render_template('index.html')
 
-@app.route('/list.json')
+@app.route('/post')
 def weblog():
-    list = [
-        {
-            'componentType': 'text',
-            'content': "Sup, yo."
-        },
-        {
-            'componentType': 'snippet',
-            'content': "I drink and I know things."
+    post = {
+            "date": "kjsdck",
+            "title": ",m ,ms",
+            "elements": [
+                {
+                  "type": "text",
+                  "content": "Sup, yo."
+                },
+                {
+                  "type": "snippet",
+                  "content": "Hello, I am content"
+                },
+                {
+                  "type": "snippet",
+                  "content": "and yup"
+                },
+                {
+                  "type": "snippet",
+                  "content": "It was a good day!"
+                }
+            ]
         }
-    ]
-    return jsonify(results=list)
+    return jsonify(post=post)
 
 # http://localhost:5000/query?file=foo.html
 @app.route('/query')
